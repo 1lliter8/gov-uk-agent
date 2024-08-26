@@ -1,0 +1,60 @@
+[tool.poetry]
+name = "gov-uk-agent"
+version = "0.1.0"
+description = "A quick streamlit/crewai integration for GOV.UK"
+authors = ["Will Langdale"]
+license = "GPL-3.0"
+readme = "README.md"
+package-mode = true
+packages = [{include = "gov_uk_agent"}, {include = "graph"}]
+
+[tool.poetry.dependencies]
+python = "~3.12"
+streamlit = "^1.37.1"
+langchain = "^0.2.14"
+yarl = "^1.9.4"
+langgraph = "^0.2.14"
+langchain-openai = "^0.1.22"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.2"
+ruff = "^0.6.2"
+poethepoet = "^0.27.0"
+pytest-cov = "^5.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+extend-exclude = [
+    "__pycache__",
+    "build",
+    "dist",
+]
+target-version = "py312"
+line-length = 88
+src = ["app", "graph", "gov_uk_agent", "tests"]
+
+[tool.ruff.format]
+# Prefer single quotes over double quotes.
+quote-style = "single"
+
+[tool.ruff.lint]
+select = [
+    "E",
+    "F",
+    "W",
+    "B",
+    "C",
+    "A",
+    "I",
+]
+
+[tool.poe.tasks]
+test = "pytest --cov=gov_uk_agent --cov=graph"
+run = "poetry run streamlit run app/Home.py"
+crew = "crewai run"
+lint = "ruff check --fix"
+format = "ruff format"
+ruff = ["format", "lint"] 
